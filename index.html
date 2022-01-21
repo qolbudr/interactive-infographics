@@ -8,25 +8,19 @@
     <title>Hello, world!</title>
   </head>
   <body>
-    <div class="container w-100 vh-100 d-flex justify-content-center surface">
-      <div class="row justify-content-center align-items-center w-100 h-100">
-        <div class="col-12 col-md-8">
-          <div class="canvas o-hidden">
-            <div class="image">
-              <img class="" src="assets/img/surface.png">
-            </div>
-          </div>
+    <div class="image-wrapper">
+      <div class="surface-wrapper">
+        <div class="container-resize">
+          <div id="slider">=</div>
+          <img class="select-disable" src="assets/img/surface.png">
         </div>
       </div>
-    </div>
-    <div class="container w-100 vh-100 d-flex justify-content-center dark">
-      <div class="row justify-content-center align-items-center w-100 h-100">
-        <div class="col-12 col-md-8">
-          <div class="canvas o-hidden">
-            <div class="image">
-              <div id="light"></div>
-              <img class="w-100" src="assets/img/dark.png">
-            </div>
+      <div class="dark-wrapper">
+        <div class="main-wraper w-100 o-hidden position-relative">
+          <div class="light-wrapper">
+            <div id="light"></div>
+            <img class="dark-title" src="assets/img/dark_title.png">
+            <img src="assets/img/dark.png">
           </div>
         </div>
       </div>
@@ -37,10 +31,52 @@
       $(document).ready(function() {
         $(this).mousemove(function(e) {
           $("#light").css({
-            "top": e.pageY - 1770,
-            "left": e.pageX - 1370
+            "top": e.pageY - 2400,
+            "left": e.pageX - 1420
           })
         })
+
+        var $dragging = null;
+        var first = null;
+        var width = $(".surface-wrapper img").width();
+
+        $(document.body).on("mousemove", function(e) {
+          if ($dragging) {
+            $dragging.offset({left: e.pageX});
+            $(".container-resize").css('width', e.pageX + 'px');
+            if(first) 
+            {
+              if(e.pageX >= width + 20) 
+              {
+                $dragging = null;
+              } 
+            }
+            else
+            {
+              if(e.pageX >= width) 
+              {
+                $dragging = null;
+                e.pageX = width + 20;
+                first = true;
+              } 
+            }
+
+            if(e.pageX <= width) {
+              first = false;
+            }
+
+            console.log(first)
+          }
+        });
+        
+        $(document.body).on("mousedown", "#slider", function (e) {
+          $dragging = $(e.target);
+          first = true;
+        });
+        
+        $(document.body).on("mouseup", function (e) {
+          $dragging = null;
+        });
       })
     </script>
   </body>
