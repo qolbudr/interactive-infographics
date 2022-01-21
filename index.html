@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
     <link rel="stylesheet" href="assets/css/styles.css">
     <title>Hello, world!</title>
   </head>
@@ -25,7 +26,8 @@
         </div>
       </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
     <script type="text/javascript">
       $(document).ready(function() {
@@ -36,47 +38,18 @@
           })
         })
 
-        var $dragging = null;
-        var first = null;
         var width = $(".surface-wrapper img").width();
 
-        $(document.body).on("mousemove", function(e) {
-          if ($dragging) {
-            $dragging.offset({left: e.pageX});
-            $(".container-resize").css('width', e.pageX + 'px');
-            if(first) 
-            {
-              if(e.pageX >= width + 20) 
-              {
-                $dragging = null;
-              } 
+        $("#slider").draggable({
+          axis: "x",
+          cursor: "crosshair",
+          drag: function( event, ui ) {
+            $(".container-resize").css('width', ui.position.left + 'px');
+            if(ui.position.left >= width) {
+              $("#slider").draggable("stop");
             }
-            else
-            {
-              if(e.pageX >= width) 
-              {
-                $dragging = null;
-                e.pageX = width + 20;
-                first = true;
-              } 
-            }
-
-            if(e.pageX <= width) {
-              first = false;
-            }
-
-            console.log(first)
           }
-        });
-        
-        $(document.body).on("mousedown", "#slider", function (e) {
-          $dragging = $(e.target);
-          first = true;
-        });
-        
-        $(document.body).on("mouseup", function (e) {
-          $dragging = null;
-        });
+        })
       })
     </script>
   </body>
